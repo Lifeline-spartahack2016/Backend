@@ -1,42 +1,64 @@
-var Connection = require('tedious').Connection;
-var config = {
-    userName: 'lifeline',
-    password: 'Uiuc2019',
-    server: 'lifeline.database.windows.net',
-    // If you are on Microsoft Azure, you need this:
-    options: {encrypt: true, database: 'AdventureWorks'}
-};
-var connection = new Connection(config);
-connection.on('connect', function(err) {
-// If no error, then good to proceed.
-    console.log("Connected");
-    CreateNewUser();
+var express = require('express');
+var app = express();
+
+// var sql = require('mssql');
+
+// var bodyParser = require('body-parser');
+// app.use(bodyParser.json());       // to support JSON-encoded bodies
+// app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  // extended: true
+// })); 
+
+
+app.get('/', function (req, res) {
+	res.send("osdfiuyguashbjknljdfiuydghjsbcnxklsajdfiudghj");
+	res.end();
 });
 
-// Step3
-var Request = require('tedious').Request;
-var TYPES = require('tedious').TYPES;
+// create user + contact(s)
+app.post('/', function(req, res){
+	// res.sendStatus(200);
+	// var data = req.body;
+	console.log("CREATE USER");
+	// res.send("fasbhdjnlk");
+	// var name = req.body.name;
+	// var email = req.body.email;
+	// var password = req.body.password;
+	console.log("-----------REQ:\n"+req.body);
 
-function CreateNewUser() {
-    request = new Request("INSERT INTO User_Info (Name, Email, Password\n VALUES(name, email, password)", function(err) {
-    if (err) {
-        console.log(err);}
-    });
-    var result = "";
-    request.on('row', function(columns) {
-        columns.forEach(function(column) {
-          if (column.value === null) {
-            console.log('NULL');
-          } else {
-            result+= column.value + " ";
-          }
-        });
-        console.log(result);
-        result ="";
-    });
+	console.log("-----------");
+	res.end();
 
-    request.on('done', function(rowCount, more) {
-    console.log(rowCount + ' rows returned');
-    });
-    connection.execSql(request);
-}
+
+});
+
+app.post('/api/createEmergencyContact', function(req, res){
+	var data = req.body;
+	var name = req.body.name;
+	var phoneNum = req.body.phoneNum;
+	var profileID = req.body.profileID;
+});
+
+app.post('/api/modifyContactInfo', function(req, res){
+	var data = req.body;
+	var contactID = req.body.contactID;
+	var name = req.body.name;
+	var phoneNum = req.body.phoneNum;
+	var profileID = req.body.profileID;
+});
+
+app.post('/api/deleteContact', function(req, res){
+	var data = req.body;
+	var contactID = req.body.contactID;
+});
+
+app.post('/api/getContacts', function(req, res){
+	var data = req.body;
+	var profileID = req.body.profileID;
+});
+
+
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});
